@@ -16,10 +16,10 @@ from .data_utils import preprocess_img
 
 class Rctw17Config(Config):
     Name = 'rctw17'
-    data_dir = os.path.join(Config.basedir, 'icdar2017rctw')
+    data_dir = os.path.join(Config.basedir, 'ocr_data')
     assert os.path.exists(data_dir), Exception('data directory does not exist..')
 
-    img_dir_trainval = os.path.join(data_dir, 'trainval')
+    img_dir_trainval = os.path.join(data_dir, 'image_train')
     annot_dir_trainval = os.path.join(data_dir, 'std_annotations_skew')
     train_txt = os.path.join(data_dir, 'train.txt')
     val_txt = os.path.join(data_dir, 'val.txt')

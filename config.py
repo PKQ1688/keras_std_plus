@@ -9,9 +9,9 @@ import os
 
 class Config(object):
     Name = None
-    basedir = 'path to dataset root dir'  # contains icdar2017rctw
+    basedir = '/home/shizai/datadisk2/adolf/data/'  # contains icdar2017rctw
     assert os.path.exists(basedir)
-    ProjDir = 'path to project dir'
+    ProjDir = '/home/shizai/adolf/ai+rpa/ocr/ocr_use/keras_std_plus_plus'
     assert os.path.exists(ProjDir), 'project directory does not exists'
 
     checkpoints_dir = os.path.join(ProjDir, 'checkpoints')
