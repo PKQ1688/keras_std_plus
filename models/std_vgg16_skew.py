@@ -1,13 +1,14 @@
-#-*- coding:utf-8 -*-
-#'''
+# -*- coding:utf-8 -*-
+# '''
 # Created on 19-7-5
 #
 # @Author: Greg Gao(laygin)
-#'''
+# '''
 '''adapted from advanced east'''
 from keras import Model
 from keras.applications.vgg16 import VGG16
-from keras.layers import Input,Concatenate, Conv2D,UpSampling2D, BatchNormalization, Deconv2D
+from keras.layers import Input, Concatenate, Conv2D, UpSampling2D, BatchNormalization
+from keras.layers import Deconvolution2D as Deconv2D
 
 
 # 19-6-15 sat, new head, there is no conv before output
@@ -30,6 +31,7 @@ class StdVGG16():
     '''
     class Semantic Text Detection definition
     '''
+
     def __init__(self,
                  input_shape=(None, None, 3),
                  locked_layers=False,
@@ -63,11 +65,11 @@ class StdVGG16():
 
     def h(self, i):
         assert i + self.diff in self.feature_layers_range, (
-        'i=%d+diff=%d not in ' % (i, self.diff), str(self.feature_layers_range))
-        if i==1:
+            'i=%d+diff=%d not in ' % (i, self.diff), str(self.feature_layers_range))
+        if i == 1:
             return self.f[i]
         else:
-            concat = Concatenate(axis=-1)([self.g(i-1), self.f[i]])
+            concat = Concatenate(axis=-1)([self.g(i - 1), self.f[i]])
             conv_1 = Conv2D(128 // 2 ** (i - 2), 1, activation='relu', padding='same')(concat)
             bn1 = BatchNormalization()(conv_1)
             conv_2 = Conv2D(128 // 2 ** (i - 2), 3, activation='relu', padding='same')(bn1)
@@ -75,12 +77,13 @@ class StdVGG16():
             return bn2
 
     def g(self, i):
-        assert i+self.diff in self.feature_layers_range, ('i=%d+diff=%d not in '% (i,self.diff), str(self.feature_layers_range))
+        assert i + self.diff in self.feature_layers_range, (
+        'i=%d+diff=%d not in ' % (i, self.diff), str(self.feature_layers_range))
         if i == self.feature_layers_num:
             conv = Conv2D(32, 3, activation='relu', padding='same')(self.h(i))
             return BatchNormalization()(conv)
         else:
-            return self.up_2x(self.h(i), int(128//2**(i-2)), self.mode)
+            return self.up_2x(self.h(i), int(128 // 2 ** (i - 2)), self.mode)
 
     def std_net(self):
         out = self.g(self.feature_layers_num)
@@ -99,5 +102,4 @@ class StdVGG16():
         x = BatchNormalization()(x)
         center_line = Conv2D(1, kernel_size=1, strides=1, activation='sigmoid', name='cl')(x)
         outs = m.outputs
-        return Model(m.input, [center_line]+outs)
-
+        return Model(m.input, [center_line] + outs)
