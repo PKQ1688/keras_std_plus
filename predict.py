@@ -1,11 +1,12 @@
-#-*- coding:utf-8 -*-
-#'''
+# -*- coding:utf-8 -*-
+# '''
 # Created on 19-7-8 上午11:28
 #
 # @Author: Greg Gao(laygin)
-#'''
+# '''
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = ''
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '4'
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,7 +14,6 @@ from utils.bbox_process import DetectSkew
 from data.data_utils import preprocess_img
 from models import create_model
 from utils import resize_image
-
 
 score = 0.1
 center_line_score = 0.3
@@ -28,7 +28,7 @@ vggmode = 'deconv'  # only for vgg16,  'deconv', 'upsample'
 plot_centerline = True
 vis_center_mask = True
 
-weights_path = 'path/to/pretrained_weights'
+weights_path = '/home/shizai/adolf/ai+rpa/ocr/ocr_use/keras_std_plus/checkpoints/rctw17/StdVGG16_384_ep05_0.598_0.866.h5'
 assert os.path.exists(weights_path), 'weight path does not exist'
 
 Detector = DetectSkew(cls_score=score,
@@ -87,4 +87,3 @@ if __name__ == '__main__':
 
     for i in os.listdir(cfg.img_dir_test):
         predictions(model, os.path.join(cfg.img_dir_test, i))
-

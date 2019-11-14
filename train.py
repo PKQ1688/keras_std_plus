@@ -5,7 +5,7 @@
 # @Author: Greg Gao(laygin)
 #'''
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = ''
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 from keras.optimizers import Adam, SGD
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau,EarlyStopping
 from models.losses import cls_center, regr_h, regr_offset, cl,angle

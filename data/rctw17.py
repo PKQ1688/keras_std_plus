@@ -1,9 +1,9 @@
-#-*- coding:utf-8 -*-
-#'''
+# -*- coding:utf-8 -*-
+# '''
 # Created on 19-5-11 下午1:44
 #
 # @Author: Greg Gao(laygin)
-#'''
+# '''
 import os
 from keras.utils import Sequence
 import numpy as np
@@ -25,8 +25,9 @@ class Rctw17Config(Config):
     val_txt = os.path.join(data_dir, 'val.txt')
     assert os.path.exists(train_txt) and os.path.exists(val_txt)
 
-    img_dir_test = os.path.join(data_dir, 'testing', 'images')
-    submit_dir = os.path.join(data_dir, 'testing', 'submit')
+    img_dir_test = os.path.join(data_dir, 'icpr_mtwi_task2')
+    print('11111==11111')
+    submit_dir = os.path.join(data_dir, 'submit')
     if not os.path.exists(submit_dir):
         os.mkdir(submit_dir)
 
@@ -90,13 +91,13 @@ class Rctw17Dataset(Sequence):
         b_img = np.zeros(
             (b, self.cfg.input_size, self.cfg.input_size, 3), dtype=np.float32)
         b_center_map = np.zeros(
-            (b, self.cfg.input_size//self.cfg.stride_size, self.cfg.input_size//self.cfg.stride_size, 3))
+            (b, self.cfg.input_size // self.cfg.stride_size, self.cfg.input_size // self.cfg.stride_size, 3))
         b_scale_map = np.zeros(
             (b, self.cfg.input_size // self.cfg.stride_size, self.cfg.input_size // self.cfg.stride_size, 2))
         b_offset_map = np.zeros(
             (b, self.cfg.input_size // self.cfg.stride_size, self.cfg.input_size // self.cfg.stride_size, 3))
         b_tcl_mask = np.zeros((b, self.cfg.input_size // self.cfg.center_line_stride,
-                              self.cfg.input_size // self.cfg.center_line_stride, 1), dtype=np.uint8)
+                               self.cfg.input_size // self.cfg.center_line_stride, 1), dtype=np.uint8)
         b_angle_map = np.zeros(
             (b, self.cfg.input_size // self.cfg.stride_size, self.cfg.input_size // self.cfg.stride_size, 2))
 
@@ -153,7 +154,7 @@ class Rctw17Dataset(Sequence):
 
             img = img.astype(np.float32)
             if not self.vis:
-                img = preprocess_img(img[...,::-1], self.cfg.model)
+                img = preprocess_img(img[..., ::-1], self.cfg.model)
 
             tcl_mask, center_map, scale_map, offset_map, angle_map = generate_targets_skew(self.cfg, bboxes)
             return img, tcl_mask, center_map, scale_map, offset_map, angle_map
@@ -166,7 +167,4 @@ class Rctw17Dataset(Sequence):
 
 
 if __name__ == '__main__':
-
     pass
-
-

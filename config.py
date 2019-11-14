@@ -11,7 +11,7 @@ class Config(object):
     Name = None
     basedir = '/home/shizai/datadisk2/adolf/data/'  # contains icdar2017rctw
     assert os.path.exists(basedir)
-    ProjDir = '/home/shizai/adolf/ai+rpa/ocr/ocr_use/keras_std_plus_plus'
+    ProjDir = '/home/shizai/adolf/ai+rpa/ocr/ocr_use/keras_std_plus'
     assert os.path.exists(ProjDir), 'project directory does not exists'
 
     checkpoints_dir = os.path.join(ProjDir, 'checkpoints')
