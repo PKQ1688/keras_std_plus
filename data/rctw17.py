@@ -17,7 +17,7 @@ from .data_utils import preprocess_img
 class Rctw17Config(Config):
     Name = 'rctw17'
     data_dir = os.path.join(Config.basedir, 'ocr_data')
-    assert os.path.exists(data_dir), Exception('data directory does not exist..')
+    # assert os.path.exists(data_dir), Exception('data directory does not exist..')
 
     img_dir_trainval = os.path.join(data_dir, 'image_train')
     annot_dir_trainval = os.path.join(data_dir, 'std_annotations_skew')
@@ -25,7 +25,8 @@ class Rctw17Config(Config):
     val_txt = os.path.join(data_dir, 'val.txt')
     assert os.path.exists(train_txt) and os.path.exists(val_txt)
 
-    img_dir_test = os.path.join(data_dir, 'icpr_mtwi_task2')
+    img_dir_test = os.path.join(data_dir, 'icpr_mtwi_task2', 'image_test')
+    # img_dir_test = '/Users/zhutaonan/Desktop/shizai/rpa/keras_std_plus_plus/data_test'
     print('11111==11111')
     submit_dir = os.path.join(data_dir, 'submit')
     if not os.path.exists(submit_dir):

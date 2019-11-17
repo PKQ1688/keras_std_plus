@@ -1,9 +1,9 @@
-#-*- coding:utf-8 -*-
-#'''
+# -*- coding:utf-8 -*-
+# '''
 # Created on 19-5-11 下午2:25
 #
 # @Author: Greg Gao(laygin)
-#'''
+# '''
 import numpy as np
 import cv2
 
@@ -15,9 +15,9 @@ def quads_area(quads):
     :return:
     '''
     p0, p1, p2, p3 = quads[:, 0], quads[:, 1], quads[:, 2], quads[:, 3]
-    a1 = np.abs(np.cross(p0-p1, p1-p2)) / 2
-    a2 = np.abs(np.cross(p0-p3, p3-p2)) / 2
-    return a1+a2
+    a1 = np.abs(np.cross(p0 - p1, p1 - p2)) / 2
+    a2 = np.abs(np.cross(p0 - p3, p3 - p2)) / 2
+    return a1 + a2
 
 
 def clip_quads(quads, clip_box, alpha=0.25):
@@ -29,11 +29,11 @@ def clip_quads(quads, clip_box, alpha=0.25):
     :return:
     '''
     areas_ = quads_area(quads)
-    quads[:,:,0] = np.minimum(np.maximum(quads[:,:,0], clip_box[0]), clip_box[2])  # 0<= x <= w
+    quads[:, :, 0] = np.minimum(np.maximum(quads[:, :, 0], clip_box[0]), clip_box[2])  # 0<= x <= w
     quads[:, :, 1] = np.minimum(np.maximum(quads[:, :, 1], clip_box[1]), clip_box[3])  # 0<= y <= h
 
     delta_area = (areas_ - quads_area(quads)) / (areas_ + 1e-6)
-    mask = (delta_area < (1-alpha)) & (quads_area(quads)>0)
+    mask = (delta_area < (1 - alpha)) & (quads_area(quads) > 0)
     return quads[mask, :, :]
 
 
@@ -44,6 +44,7 @@ class RandomCrop(object):
             output_size (tuple or int): Desired output size. If int, square crop
                 is made.
         """
+
     def __init__(self, output_size):
         assert isinstance(output_size, (int, tuple))
         if isinstance(output_size, int):
@@ -116,12 +117,14 @@ class Resize(object):
 
         for i in range(len(coors)):
             coors[i][:, :, 0] = coors[i][:, :, 0] * new_w / w
-            coors[i][:,:,1] = coors[i][:,:,1] * new_h / h
+            coors[i][:, :, 1] = coors[i][:, :, 1] * new_h / h
 
         return img, coors
 
 
 '''augmentation'''
+
+
 class RandomBrightness(object):
     def __init__(self, delta=32):
         assert 255 >= delta >= 0, 'delta is invalid'
@@ -129,7 +132,7 @@ class RandomBrightness(object):
 
     def __call__(self, img, coors=None):
         img = img.astype(np.float32)
-        if np.random.randint(0,2):
+        if np.random.randint(0, 2):
             delta = np.random.uniform(-self.delta, self.delta)
             img += delta
         return np.clip(img, 0, 255), coors
@@ -149,4 +152,3 @@ class RandomContrast(object):
             alpha = np.random.uniform(self.lower, self.upper)
             img *= alpha
         return np.clip(img, 0, 255), coors
-

@@ -43,7 +43,7 @@ def create_callbacks(mm, monitor='val_loss'):
     nn = '%s_%s_ep{epoch:02d}_{loss:.3f}_{val_loss:.3f}.h5' % (mm, cfg.input_size)
     checkpoint = ModelCheckpoint(os.path.join(dd, nn),
                                  monitor=monitor, save_best_only=True, save_weights_only=True, verbose=1)
-    earlystop = EarlyStopping(patience=10, monitor=monitor, verbose=1)
+    earlystop = EarlyStopping(patience=100, monitor=monitor, verbose=1)
     reduce = ReduceLROnPlateau(monitor=monitor, patience=2)
 
     return [checkpoint, earlystop, reduce]

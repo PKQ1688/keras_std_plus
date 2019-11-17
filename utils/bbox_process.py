@@ -1,9 +1,9 @@
-#-*- coding:utf-8 -*-
-#'''
+# -*- coding:utf-8 -*-
+# '''
 # Created on 19-5-13 下午4:09
 #
 # @Author: Greg Gao(laygin)
-#'''
+# '''
 import cv2
 import numpy as np
 from skimage.draw import polygon as draw_polygon
@@ -94,14 +94,14 @@ class DetectSkew():
             o_x = offset_x[y_c[i], x_c[i]]
             s = seman[y_c[i], x_c[i]]
             x1, y1 = max(0, (x_c[i] + o_x + 0.5) * stride_size - w / 2), max(0, (
-                        y_c[i] + o_y + 0.5) * stride_size - h / 2)
+                    y_c[i] + o_y + 0.5) * stride_size - h / 2)
             a = angle[y_c[i], x_c[i]]
             boxs.append(Quad([x1, y1, min(x1 + w, imgsize[1]), min(y1 + h, imgsize[0]), a, s]))
 
         return boxs
 
     def make_center_mask(self):
-        center_line = self.center_line[0,:,:,0]
+        center_line = self.center_line[0, :, :, 0]
         center_line = (center_line >= self.center_line_score)
         center_mask = (center_line * 255).astype(np.uint8)
         return center_mask
@@ -152,19 +152,19 @@ class DetectSkew():
         rects = []
         for c in conts:
             r = cv2.minAreaRect(c)  # (x,y),(w,h), a = rect
-            b = np.int0(cv2.boxPoints(r))   # left down, left up, right up, right down
+            b = np.int0(cv2.boxPoints(r))  # left down, left up, right up, right down
             rects.append(np.append(b.flatten(), score))
 
         return np.array(rects)
 
-    def detect(self, Y, imgsize:(tuple, list)):
+    def detect(self, Y, imgsize: (tuple, list)):
         assert len(imgsize) == 2, 'img size must be a tuple or list which includes height and width'
         self._extract_prediction(Y)
         mini_boxes = self.get_miniboxes(imgsize)
         center_mask = self.make_center_mask()
         mask, _ = self.build_mask_from_mini_boxes(imgsize, mini_boxes)
         # make center line mask from mask and center score mask
-        tcl_mask = ((mask>0) * (center_mask>0)).astype(np.uint8) * 255
+        tcl_mask = ((mask > 0) * (center_mask > 0)).astype(np.uint8) * 255
 
         # find contours from tcl mask, to split mini boxes into different text lines
         conts = self._find_contours(tcl_mask)
@@ -190,4 +190,3 @@ class DetectSkew():
             img_to_be_plotted = cv2.drawContours(img_to_be_plotted, all_quads, -1, color, 2)
 
         return img_to_be_plotted
-
